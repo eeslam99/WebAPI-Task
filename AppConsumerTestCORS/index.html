@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+    <h2>Search for Student</h2>
+    <input type="number" id="studentId" placeholder="Enter Student ID">
+    <button onclick="getStudent()">Get Student</button>
+
+    <h3>Student Details</h3>
+    <div id="studentData"></div>
+
+    <script>
+        function getStudent() {
+            var studentId = document.getElementById("studentId").value;
+
+            if (!studentId) {
+                alert("Please enter a student ID");
+                return;
+            }
+
+            $.ajax({
+                    url: `https://localhost:7248/api/Students`, 
+                    type: "GET",
+                    success: function (student) {
+                        console.log(student)
+                        $("#studentData").html(`
+                            <p><strong>ID:</strong> ${student.stId}</p>
+                            <p><strong>Name:</strong> ${student.stFname} ${student.stLname}</p>
+                            <p><strong>Department:</strong> ${student.departmentName}</p>
+                            <p><strong>Supervisor:</strong> ${student.supervisorName}</p>
+                        `);
+                    },
+                    error: function (xhr) {
+                        $("#studentData").html(`<p style="color: red;">Student not found</p>`);
+                    }
+                });
+        }
+    </script>
+</body>
+</html>
